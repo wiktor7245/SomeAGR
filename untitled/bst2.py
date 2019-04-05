@@ -1,3 +1,8 @@
+f = open('keysInsert.txt', 'r')
+keysIns = f.read().split(' ')
+print(keysIns)
+l = [int(num) for num in keysIns]
+print(l)
 # Python program to demonstrate delete operation 
 # in binary search tree 
 
@@ -30,10 +35,11 @@ def insert(node, key):
         # Otherwise recur down the tree
     if key < node.key:
         node.left = insert(node.left, key)
+        print("Dodalismy: " + str(key))
     else:
         node.right = insert(node.right, key)
-
-        # return the (unchanged) node pointer
+        print("Dodalismy: " + str(key))
+		# return the (unchanged) node pointer
     return node
 
 
@@ -104,13 +110,9 @@ def deleteNode(root, key):
        20   40  60   80 """
 
 root = None
-root = insert(root, 50)
-root = insert(root, 30)
-root = insert(root, 20)
-root = insert(root, 40)
-root = insert(root, 70)
-root = insert(root, 60)
-root = insert(root, 80)
+
+for nr in l:
+   root = insert(root,nr)
 
 print("Inorder traversal of the given tree")
 inorder(root)

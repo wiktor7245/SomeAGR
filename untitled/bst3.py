@@ -1,171 +1,246 @@
-class node:
-	def __init__(self,value=None):
-		self.value=value
-		self.left_child=None
-		self.right_child=None
-		self.parent=None # pointer to parent node in tree
+# Binary Search Tree in Python
 
-class binary_search_tree:
+f = open('keysInsert.txt', 'r')
+keysIns = f.read().split(' ')
+print(keysIns)
+l = [int(num) for num in keysIns]
+print(l)
+
+class Node:
+	def __init__(self, val):
+		self.value = val
+		self.leftChild = None
+		self.rightChild = None
+
+	def insert(self, data):
+		if self.value == data:
+			return False
+
+		elif self.value > data:
+			if self.leftChild:
+				return self.leftChild.insert(data)
+			else:
+				self.leftChild = Node(data)
+				return True
+
+		else:
+			if self.rightChild:
+				return self.rightChild.insert(data)
+			else:
+				self.rightChild = Node(data)
+				return True
+
+	def find(self, data):
+		if (self.value == data):
+			return True
+		elif self.value > data:
+			if self.leftChild:
+				return self.leftChild.find(data)
+			else:
+				return False
+		else:
+			if self.rightChild:
+				return self.rightChild.find(data)
+			else:
+				return False
+
+	def getSize(self):
+		if self.leftChild and self.rightChild:
+			return 1 + self.leftChild.getSize() + self.rightChild.getSize()
+		elif self.leftChild:
+			return 1 + self.leftChild.getSize()
+		elif self.rightChild:
+			return 1 + self.rightChild.getSize()
+		else:
+			return 1
+
+	def getHeight(self):
+		if self.leftChild and self.rightChild:
+			return 1 + max(self.leftChild.getHeight(), self.rightChild.getHeight())
+		elif self.leftChild:
+			return 1 + self.leftChild.getHeight()
+		elif self.rightChild:
+			return 1 + self.rightChild.getHeight()
+		else:
+			return 1
+
+	def preorder(self):
+		if self:
+			print(str(self.value))
+			if self.leftChild:
+				self.leftChild.preorder()
+			if self.rightChild:
+				self.rightChild.preorder()
+
+	def postorder(self):
+		if self:
+			if self.leftChild:
+				self.leftChild.postorder()
+			if self.rightChild:
+				self.rightChild.postorder()
+			print(str(self.value))
+
+	def inorder(self):
+		if self:
+			if self.leftChild:
+				self.leftChild.inorder()
+			print(str(self.value))
+			if self.rightChild:
+				self.rightChild.inorder()
+
+
+class Tree:
 	def __init__(self):
-		self.root=None
+		self.root = None
 
-	def insert(self,value):
-		if self.root==None:
-			self.root=node(value)
+	def insert(self, data: object) -> object:
+		if self.root:
+			return self.root.insert(data)
 		else:
-			self._insert(value,self.root)
+			self.root = Node(data)
+			return True
 
-	def _insert(self,value,cur_node):
-		if value<cur_node.value:
-			if cur_node.left_child==None:
-				cur_node.left_child=node(value)
-				cur_node.left_child.parent=cur_node # set parent
-			else:
-				self._insert(value,cur_node.left_child)
-		elif value>cur_node.value:
-			if cur_node.right_child==None:
-				cur_node.right_child=node(value)
-				cur_node.right_child.parent=cur_node # set parent
-			else:
-				self._insert(value,cur_node.right_child)
-		else:
-			print("Value already in tree!")
-
-	def print_tree(self):
-		if self.root!=None:
-			self._print_tree(self.root)
-
-	def _print_tree(self,cur_node):
-		if cur_node!=None:
-			self._print_tree(cur_node.left_child)
-			print (str(cur_node.value))
-			self._print_tree(cur_node.right_child)
-
-	def height(self):
-		if self.root!=None:
-			return self._height(self.root,0)
-		else:
-			return 0
-
-	def _height(self,cur_node,cur_height):
-		if cur_node==None: return cur_height
-		left_height=self._height(cur_node.left_child,cur_height+1)
-		right_height=self._height(cur_node.right_child,cur_height+1)
-		return max(left_height,right_height)
-
-	def find(self,value):
-		if self.root!=None:
-			return self._find(value,self.root)
-		else:
-			return None
-
-	def _find(self,value,cur_node):
-		if value==cur_node.value:
-			return cur_node
-		elif value<cur_node.value and cur_node.left_child!=None:
-			return self._find(value,cur_node.left_child)
-		elif value>cur_node.value and cur_node.right_child!=None:
-			return self._find(value,cur_node.right_child)
-
-	def delete_value(self,value):
-		return self.delete_node(self.find(value))
-
-	def delete_node(self,node):
-
-		## -----
-		# Improvements since prior lesson
-
-		# Protect against deleting a node not found in the tree
-		if node==None or self.find(node.value)==None:
-			print("Node to be deleted not found in the tree!")
-			return None 
-		## -----
-
-		# returns the node with min value in tree rooted at input node
-		def min_value_node(n):
-			current=n
-			while current.left_child!=None:
-				current=current.left_child
-			return current
-
-		# returns the number of children for the specified node
-		def num_children(n):
-			num_children=0
-			if n.left_child!=None: num_children+=1
-			if n.right_child!=None: num_children+=1
-			return num_children
-
-		# get the parent of the node to be deleted
-		node_parent=node.parent
-
-		# get the number of children of the node to be deleted
-		node_children=num_children(node)
-
-		# break operation into different cases based on the
-		# structure of the tree & node to be deleted
-
-		# CASE 1 (node has no children)
-		if node_children==0:
-
-			# Added this if statement post-video, previously if you 
-			# deleted the root node it would delete entire tree.
-			if node_parent!=None:
-				# remove reference to the node from the parent
-				if node_parent.left_child==node:
-					node_parent.left_child=None
-				else:
-					node_parent.right_child=None
-			else:
-				self.root=None
-
-		# CASE 2 (node has a single child)
-		if node_children==1:
-
-			# get the single child node
-			if node.left_child!=None:
-				child=node.left_child
-			else:
-				child=node.right_child
-
-			# Added this if statement post-video, previously if you 
-			# deleted the root node it would delete entire tree.
-			if node_parent!=None:
-				# replace the node to be deleted with its child
-				if node_parent.left_child==node:
-					node_parent.left_child=child
-				else:
-					node_parent.right_child=child
-			else:
-				self.root=child
-
-			# correct the parent pointer in node
-			child.parent=node_parent
-
-		# CASE 3 (node has two children)
-		if node_children==2:
-
-			# get the inorder successor of the deleted node
-			successor=min_value_node(node.right_child)
-
-			# copy the inorder successor's value to the node formerly
-			# holding the value we wished to delete
-			node.value=successor.value
-
-			# delete the inorder successor now that it's value was
-			# copied into the other node
-			self.delete_node(successor)
-
-	def search(self,value):
-		if self.root!=None:
-			return self._search(value,self.root)
+	def find(self, data):
+		if self.root:
+			return self.root.find(data)
 		else:
 			return False
 
-	def _search(self,value,cur_node):
-		if value==cur_node.value:
+	def getHeight(self):
+		if self.root:
+			return self.root.getHeight()
+		else:
+			return 0
+
+	def getSize(self):
+		if self.root:
+			return self.root.getSize()
+		else:
+			return 0
+
+	def remove(self, data):
+		# empty tree
+		if self.root is None:
+			return False
+
+		# data is in root node
+		elif self.root.value == data:
+			if self.root.leftChild is None and self.root.rightChild is None:
+				self.root = None
+			elif self.root.leftChild and self.root.rightChild is None:
+				self.root = self.root.leftChild
+			elif self.root.leftChild is None and self.root.rightChild:
+				self.root = self.root.rightChild
+			elif self.root.leftChild and self.root.rightChild:
+				delNodeParent = self.root
+				delNode = self.root.rightChild
+				while delNode.leftChild:
+					delNodeParent = delNode
+					delNode = delNode.leftChild
+
+				self.root.value = delNode.value
+				if delNode.rightChild:
+					if delNodeParent.value > delNode.value:
+						delNodeParent.leftChild = delNode.rightChild
+					elif delNodeParent.value < delNode.value:
+						delNodeParent.rightChild = delNode.rightChild
+				else:
+					if delNode.value < delNodeParent.value:
+						delNodeParent.leftChild = None
+					else:
+						delNodeParent.rightChild = None
+
 			return True
-		elif value<cur_node.value and cur_node.left_child!=None:
-			return self._search(value,cur_node.left_child)
-		elif value>cur_node.value and cur_node.right_child!=None:
-			return self._search(value,cur_node.right_child)
-		return False 
+
+		parent = None
+		node = self.root
+
+		# find node to remove
+		while node and node.value != data:
+			parent = node
+			if data < node.value:
+				node = node.leftChild
+			elif data > node.value:
+				node = node.rightChild
+
+		# case 1: data not found
+		if node is None or node.value != data:
+			return False
+
+		# case 2: remove-node has no children
+		elif node.leftChild is None and node.rightChild is None:
+			if data < parent.value:
+				parent.leftChild = None
+			else:
+				parent.rightChild = None
+			return True
+
+		# case 3: remove-node has left child only
+		elif node.leftChild and node.rightChild is None:
+			if data < parent.value:
+				parent.leftChild = node.leftChild
+			else:
+				parent.rightChild = node.leftChild
+			return True
+
+		# case 4: remove-node has right child only
+		elif node.leftChild is None and node.rightChild:
+			if data < parent.value:
+				parent.leftChild = node.rightChild
+			else:
+				parent.rightChild = node.rightChild
+			return True
+
+		# case 5: remove-node has left and right children
+		else:
+			delNodeParent = node
+			delNode = node.rightChild
+			while delNode.leftChild:
+				delNodeParent = delNode
+				delNode = delNode.leftChild
+
+			node.value = delNode.value
+			if delNode.rightChild:
+				if delNodeParent.value > delNode.value:
+					delNodeParent.leftChild = delNode.rightChild
+				elif delNodeParent.value < delNode.value:
+					delNodeParent.rightChild = delNode.rightChild
+			else:
+				if delNode.value < delNodeParent.value:
+					delNodeParent.leftChild = None
+				else:
+					delNodeParent.rightChild = None
+
+	def preorder(self):
+		if self.root is not None:
+			print("PreOrder")
+			self.root.preorder()
+
+	def postorder(self):
+		if self.root is not None:
+			print("PostOrder")
+			self.root.postorder()
+
+	def inorder(self):
+		if self.root is not None:
+			print("InOrder")
+			self.root.inorder()
+
+
+def main():
+	bst = Tree()
+	for nr in l:
+		bst.insert(nr)
+	'''print(bst.insert(10))
+	print(bst.insert(5))
+	bst.insert(2)
+	bst.insert(7)
+	bst.preorder()
+	print('Height = ', bst.getHeight())
+	print('Size = ', bst.getSize())
+	# bst.postorder()
+	# bst.inorder()
+	print(bst.remove(10))
+	bst.preorder()'''
+
+main()

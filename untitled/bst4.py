@@ -135,6 +135,14 @@ class Tree(object):
             self.root = Node(data)
             return True
 
+    def get_height(self,root):
+        if root is None:
+            return 0
+
+        my_height = 1 + max(self.get_height(root.leftChild), self.get_height(root.rightChild))
+        print("id :{} height: {}".format(root.id, my_height))
+        return my_height
+
     def delete(self, data):
         if self.root is not None:
             return self.root.delete(data)
@@ -179,6 +187,7 @@ if __name__ == '__main__':
     tree.insert(15)'''
     print(tree.find(1))
     print(tree.find(12))
+    tree.get_height(12)
     ''' Following tree is getting created:
                     10
                  /      \

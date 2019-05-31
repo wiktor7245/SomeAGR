@@ -27,21 +27,36 @@ def Hamilton(matrix,v,V,result):
 
 RESULT=[]
 def multiHamilton(matrix,v,V,RESULT):
+    temp = []
+    i = 0
     #case where we have new cycle
     if len(V)==len(matrix) and matrix[v][0]:
         RESULT.append(V+[0])
-        print(RESULT)
+        temp = RESULT.copy()
+        print("CYKL HAMILTONA: " + str(RESULT[i]))
+        i = i+1
     #starting looking for new cycle
     if not len(V):
         V.append(0)
+        print(V)
     #any other case
     for w in range(len(matrix[v])):
         if matrix[v][w] and w not in V:
             V.append(w)
             print(V)
+            if temp != V and len(temp) != 0:
+                print(V)
+                temp.pop()
+            elif len(temp) == 0:
+                pass
+            else:
+                temp.pop()
+            if len(temp) != 0:
+                temp.pop()
             multiHamilton(matrix,w,V,RESULT)
             print(V)
             V.pop()
+
 
 res2= []
 mtx2= \
@@ -51,7 +66,4 @@ mtx2= \
 [0,0,1,0,0,1],
 [0,0,1,1,0,0],
 [1,1,1,0,0,0]]
-print("sdasd")
 multiHamilton(mtx2,0,[],res2)
-print(res2)
-print("sadasd")

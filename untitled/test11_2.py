@@ -124,15 +124,17 @@ def multiHamilton(matrix,v,V,RESULT):
         RESULT.append(V+[0])
     if not len(V):
         V.append(0)
+        print(V)
     for w in range(len(matrix[v])):
         if matrix[v][w] and w not in V:
             V.append(w)
+            print(V)
             multiHamilton(matrix,w,V,RESULT)
             V.pop()
 
-print ("WIELE HAMILTONÓW")
+'''print ("WIELE HAMILTONÓW")
 multiHamilton(matrix,0,[],RESULT)
-print(RESULT)
+print(RESULT)'''
 
 res2= []
 mtx2= \

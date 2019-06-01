@@ -1,11 +1,13 @@
-RESULT=[]
-def multiHamilton(matrix,v,V,RESULT):
+f = open('Hamilton.txt', 'r')
+hamilton_file = [[int(num) for num in line.split(' ')] for line in f]
+
+def hamilton(matrix,v,V,out):
     temp = []
     #case where we have new cycle
     if len(V)==len(matrix) :
-        RESULT.append(V+[0])
+        out.append(V+[0])
         #trick in len to display only the last element of result array
-        print("CYKL HAMILTONA: " + str(RESULT[len(RESULT)-1]))
+        print("CYKL HAMILTONA: " + str(out[len(out)-1]))
     #starting looking for new cycle
     if not len(V):
         V.append(0)
@@ -16,21 +18,12 @@ def multiHamilton(matrix,v,V,RESULT):
             V.append(w)
             temp = V.copy()
             print(V)
-            multiHamilton(matrix,w,V,RESULT)
+            hamilton(matrix,w,V,out)
             V.pop()
         if temp != V and len(temp) != 0:
             print(V)
             temp.pop()
         temp = V.copy()
 
-
-
-res2= []
-mtx2= \
-[[0,1,0,0,0,0],
- [0,0,1,0,1,0],
- [1,0,0,1,0,0],
-[0,0,1,0,0,1],
-[0,0,1,1,0,0],
-[1,1,1,0,0,0]]
-multiHamilton(mtx2,0,[],res2)
+res= []
+hamilton(hamilton_file,0,[],res)

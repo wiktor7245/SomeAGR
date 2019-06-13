@@ -9,16 +9,16 @@ class Graph:
 
 
 class Node(object):
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, data):
+        self.data = data
         self.left = None
         self.right = None
 
     def insert(self, data):
-        if self.value == data:
+        if self.data == data:
             return False
 
-        elif data < self.value:
+        elif data < self.data:
             if self.left:
                 return self.left.insert(data)
             else:
@@ -65,18 +65,18 @@ class Node(object):
             return max(self.height(root.left), self.height(root.right)) + 1
 
 
-class a08_TeskeKarol_pn(object):
-    matrix = []
+class main(object):
+    x = 0
+    inputMtx = []
     graph = []
     rotateMatrix = []
     saturate = []
     path = ""
-    f = 0
 
 
     def run(self):
-        self.matrix = self.read('Matching0.txt')
-        self.rotate(self.matrix)
+        self.inputMtx = self.read('Matching.txt')
+        self.rotate(self.inputMtx)
         self.prepareSaturateMatrix()
         self.getAssociations()
 
@@ -165,4 +165,4 @@ class a08_TeskeKarol_pn(object):
         return True
 
 if __name__ == '__main__':
-   a08_TeskeKarol_pn().run()
+   main().run()

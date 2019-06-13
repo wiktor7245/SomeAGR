@@ -20,7 +20,7 @@ def Euler(matrix, sv):
                 matrix[i][j]*=-1
         return out
 
-'''MATRIX = [
+MATRIX = [
 [0,1,1,0,0,0],
 [1,0,1,1,1,0],
 [1,1,0,1,1,0],
@@ -29,5 +29,5 @@ def Euler(matrix, sv):
 [0,0,0,1,1,0],
 ]
 print ("EULER")
-print(Euler(MATRIX,0))'''
+print(Euler(MATRIX,0))
 
